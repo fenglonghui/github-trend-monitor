@@ -123,7 +123,7 @@ def classify(row, keywords):
             match.add(name)
     for src in row['sources']:
         if src.startswith('Search:'):
-            match.add(src.removeprefix('Search:'))
+            match.add(src[len('Search:'):] if src.startswith('Search:') else src)
     return match
 
 
