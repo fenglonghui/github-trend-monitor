@@ -1,0 +1,11 @@
+{
+  "topics": {
+    "AI Agent": ["agent", "agentic", "multi-agent", "autonomous", "coding assistant", "agent harness"],
+    "LLM": ["llm", "large language model", "language model", "transformer", "fine-tun", "vllm", "llm inference"],
+    "MCP": ["model context protocol", "mcp-server", "mcp server", "mcp-client", "mcp client", "mcp registry"],
+    "RAG": ["retrieval augmented generation", "retrieval-augmented-generation", "agentic rag", "graphrag", "rag pipeline"],
+    "Skills": ["agent skills", "agent-skills", "skill.md", "claude skills", "codex skills"]
+  },
+  "top_n": 15,
+  "search_per_topic": 20
+}
