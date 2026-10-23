@@ -1,0 +1,63 @@
+
+name: GitHub Weekly Trend Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every Monday 09:17 Asia/Seoul
+    - cron: '17 0 * * 1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: github-weekly-trend-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate weekly report
+        run: python scripts/report.py
+
+      - name: Verify generated files
+        run: |
+          test -s LATEST.md
+          test -d reports
+          ls -lh LATEST.md
+          ls -lh reports/
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add LATEST.md reports/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update GitHub weekly trends"
+            git push
+          fi
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-weekly-trends
+          path: |
+            LATEST.md
+            reports/*.md
+          if-no-files-found: warn
